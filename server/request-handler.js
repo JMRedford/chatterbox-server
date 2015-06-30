@@ -62,8 +62,6 @@ exports.requestHandler = function(request, response) {
     if (request.method === 'OPTIONS') {
       console.log('!OPTIONS');
       var headers = {};
-      // IE8 does not allow domains to be specified, just the *
-      // headers["Access-Control-Allow-Origin"] = req.headers.origin;
       headers["Access-Control-Allow-Origin"] = "*";
       headers["Access-Control-Allow-Methods"] = "POST, GET, PUT, DELETE, OPTIONS";
       headers["Access-Control-Allow-Credentials"] = false;
@@ -88,9 +86,10 @@ exports.requestHandler = function(request, response) {
               "createdAt": timeStamp,
               "objectId": "AHQWpEerdg",
               "roomname": parsedChunk.roomname,
-              "text": parsedChunk.text,
+             // "text": parsedChunk.text,
+              'message': parsedChunk.message,
               "updatedAt": timeStamp,
-              "username": parsedChunk.username,
+              "username": parsedChunk.username
         }
 
         messages.push(newMessage);
@@ -99,6 +98,9 @@ exports.requestHandler = function(request, response) {
       response.end();
     }
 
+  } else {
+    response.writeHead(404);
+    response.end();
   }
   //
   // Calling .end "flushes" the response's internal buffer, forcing
